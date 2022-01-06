@@ -10,8 +10,7 @@
     /* Retrive variables from get */
     if(isset($_GET["clientID"])){
         if(isset($_GET["deletePhotoAction"]) && $_GET["deletePhotoAction"] == 1){
-            $clientPhoto = getClientPhotoFromID($_GET["clientID"]);
-            if(unlink($clientPhoto)){
+            if(unlink(getClientPhotoAuxPathFromID($_GET["clientID"]))){
                 #$deletePhotoAction = unsetClientPhoto($_GET["clientID"]);
                 #if($deletePhotoAction == 0){
                 if(unsetClientPhoto($_GET["clientID"]) == 0){
@@ -73,11 +72,25 @@
                     $editAction = -5;
                     $uploadOk = 0;
                 }
+                // Check if photo already exists
+                if (getClientPhotoAuxPathFromID($_GET["clientID"]) != NULL) {
+                    if(unlink(getClientPhotoAuxPathFromID($_GET["clientID"]))){
+                        #$deletePhotoAction = unsetClientPhoto($_GET["clientID"]);
+                        #if($deletePhotoAction == 0){
+                        if(unsetClientPhoto($_GET["clientID"]) != 0){
+                            $uploadOk = 0;
+                            $editAction = -7;
+                        }
+                    }else{
+                        $uploadOk = 0;
+                        $editAction = -7;
+                    }
+                }
                 // Check if $uploadOk is set to 0 by an error
                 if ($uploadOk == 1) {
                     if (move_uploaded_file($_FILES["clientImgEdit"]["tmp_name"], $target_file)) {
                         $photoPath = "..\clients\clients_img\\".$newname;
-                        $editAction = editClient($_POST["clientNameEdit"],$_POST["clientNifEdit"],$_POST["clientAddressEdit"],$_POST["clientPhoneEdit"],$_POST["clientEmailEdit"],$_POST["clientIDEdit"],$_POST["clientNotesEdit"],$photoPath);
+                        $editAction = editClient($_SESSION["id"], $_POST["clientNameEdit"],$_POST["clientNifEdit"],$_POST["clientAddressEdit"],$_POST["clientPhoneEdit"],$_POST["clientEmailEdit"],$_POST["clientIDEdit"],$_POST["clientNotesEdit"],$photoPath,$target_file);
                     } else {
                         $editAction = -6;
                         $uploadOk = 0;
@@ -85,7 +98,8 @@
                 }
             }else{  
                 $clientPhoto = getClientPhotoFromID($_GET["clientID"]);
-                $editAction = editClient($_POST["clientNameEdit"],$_POST["clientNifEdit"],$_POST["clientAddressEdit"],$_POST["clientPhoneEdit"],$_POST["clientEmailEdit"],$_POST["clientIDEdit"],$_POST["clientNotesEdit"],$clientPhoto);
+                $clientPhotoAuxPath = getClientPhotoAuxPathFromID($_GET["clientID"]);
+                $editAction = editClient($_SESSION["id"], $_POST["clientNameEdit"],$_POST["clientNifEdit"],$_POST["clientAddressEdit"],$_POST["clientPhoneEdit"],$_POST["clientEmailEdit"],$_POST["clientIDEdit"],$_POST["clientNotesEdit"],$clientPhoto,$clientPhotoAuxPath);
             }
             if($editAction == 0){
                 header("Location: ../clients/client.php?clientID=".$_POST["clientIDEdit"]."&editAction=0");
@@ -146,7 +160,7 @@
     <div class="w3-content" style="max-width:600px">
         <h2>Editar cliente</h2>
         <!-- Error banners -->
-        <?php if($editAction == -1 || $editAction == -2 || $editAction == -3 || $editAction == -4 || $editAction == -5 || $editAction == -6 || $_GET["deletePhotoAction"] == -1 || $_GET["deletePhotoAction"] == -2 || $_GET["deletePhotoAction"] == -3){ ?>
+        <?php if($editAction == -1 || $editAction == -2 || $editAction == -3 || $editAction == -4 || $editAction == -5 || $editAction == -6 || $editAction == -7 || $_GET["deletePhotoAction"] == -1 || $_GET["deletePhotoAction"] == -2 || $_GET["deletePhotoAction"] == -3){ ?>
             <div class="w3-panel w3-red w3-display-container">
                 <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h3><i class="fas fa-hand-paper"></i> Erro</h3>
@@ -165,8 +179,12 @@
                                 <?php if($editAction == -6){ ?>
                                     <p>Não foi possível carregar foto  (-6).</p>
                                 <?php }else{ ?>
-                                    <?php if($_GET["deletePhotoAction"] == -1 || $_GET["deletePhotoAction"] == -2 || $_GET["deletePhotoAction"] == -3){ ?>
-                                        <p>Não foi possível eliminar foto do cliente (-1/-2/-3).</p>
+                                    <?php if($editAction == -7){ ?>
+                                        <p>Não foi possível eliminar antiga foto, o que impossibilita carregar nova  (-7).</p>
+                                    <?php }else{ ?>
+                                        <?php if($_GET["deletePhotoAction"] == -1 || $_GET["deletePhotoAction"] == -2 || $_GET["deletePhotoAction"] == -3){ ?>
+                                            <p>Não foi possível eliminar foto do cliente (-1/-2/-3).</p>
+                                        <?php } ?>
                                     <?php } ?>
                                 <?php } ?>
                             <?php } ?>

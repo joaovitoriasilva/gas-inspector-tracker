@@ -25,7 +25,7 @@
             $query="SELECT * FROM clients";
             $stmt=$mydb->prepare($query);
             if ($stmt->execute()) {
-                $stmt->bind_result($id,$user_id,$nome,$nif,$morada,$telefone,$email,$notas,$photo_path);
+                $stmt->bind_result($id,$user_id,$nome,$nif,$morada,$telefone,$email,$notas,$photo_path,$photo_path_aux);
                 while ($stmt->fetch()){
                     $result[] = array( 
                         "id" => $id,
@@ -36,7 +36,8 @@
                         "phone" => $telefone,
                         "email" => $email,
                         "notes" => $notas,
-                        "photo_path" => $photo_path);
+                        "photo_path" => $photo_path,
+                        "photo_path_aux" => $photo_path_aux);
                 }
                 if($stmt->num_rows == 0){
                     $result = -3;
@@ -70,7 +71,7 @@
             $query = "SELECT * FROM clients LIMIT $offset, $no_of_records_per_page";
             $stmt=$mydb->prepare($query);
             if ($stmt->execute()) {
-                $stmt->bind_result($id,$user_id,$nome,$nif,$morada,$telefone,$email,$notas,$photo_path);
+                $stmt->bind_result($id,$user_id,$nome,$nif,$morada,$telefone,$email,$notas,$photo_path,$photo_path_aux);
                 while ($stmt->fetch()){
                     $result[] = array( 
                         "id" => $id,
@@ -81,7 +82,8 @@
                         "phone" => $telefone,
                         "email" => $email,
                         "notes" => $notas,
-                        "photo_path" => $photo_path);
+                        "photo_path" => $photo_path,
+                        "photo_path_aux" => $photo_path_aux);
                 }
                 if($stmt->num_rows == 0){
                     $result = -3;
@@ -106,7 +108,7 @@
             $stmt=$mydb->prepare($query);
             $stmt->bind_param('i',$id);
             if ($stmt->execute()) {
-                $stmt->bind_result($id,$user_id,$nome,$nif,$morada,$telefone,$email,$notas,$photo_path);
+                $stmt->bind_result($id,$user_id,$nome,$nif,$morada,$telefone,$email,$notas,$photo_path,$photo_path_aux);
                 while ($stmt->fetch()){
                     $result[] = array( 
                         "id" => $id,
@@ -117,7 +119,8 @@
                         "phone" => $telefone,
                         "email" => $email,
                         "notes" => $notas,
-                        "photo_path" => $photo_path);
+                        "photo_path" => $photo_path,
+                        "photo_path_aux" => $photo_path_aux);
                 }
                 if($stmt->num_rows == 0){
                     $result = -3;
@@ -237,12 +240,38 @@
         return $result;
     }
 
+    /* Get client photo aux path from ID */
+    function getClientPhotoAuxPathFromID($id){
+        global $mydb;
+        $number=numClients();
+        if($number != -1){
+            $query="SELECT photo_path_aux FROM clients WHERE id=?";
+            $stmt=$mydb->prepare($query);
+            $stmt->bind_param('i',$id);
+            if ($stmt->execute()) {
+                $stmt->bind_result($photo_path_aux);
+                while ($stmt->fetch()){
+                    $result = $photo_path_aux;
+                }
+                if($stmt->num_rows == 0){
+                    $result = -3;
+                }
+            }else{
+                $result = -2;
+            }
+            $stmt->close();
+        }else{
+            $result=-1;
+        }
+        return $result;
+    }
+
     /* Unset client photo */
     function unsetClientPhoto($id){
         global $mydb;
         $number=numClients();
         if($number != -1){
-            $query = "UPDATE clients SET photo_path = NULL WHERE id = ?";
+            $query = "UPDATE clients SET photo_path = NULL, photo_path_aux = NULL WHERE id = ?";
             $stmt = $mydb->prepare($query);
             $stmt->bind_param("i", $id);
             if ($stmt->execute()) {
@@ -258,13 +287,13 @@
     }
 
     /* Edit client */
-    function editClient($user_id, $nome, $nif, $morada, $telefone, $email, $id, $notas, $photo_path){
+    function editClient($user_id, $nome, $nif, $morada, $telefone, $email, $id, $notas, $photo_path, $photo_path_aux){
         global $mydb;
         $number=numClients();
         if($number != -1){
-            $query = "UPDATE clients SET user_id = ?, nome = ?, nif= ?, morada = ?, telefone = ?, email = ?, notas = ?, photo_path = ? WHERE id = ?";
+            $query = "UPDATE clients SET user_id = ?, nome = ?, nif= ?, morada = ?, telefone = ?, email = ?, notas = ?, photo_path = ?, photo_path_aux = ? WHERE id = ?";
             $stmt = $mydb->prepare($query);
-            $stmt->bind_param("isisisssi",$user_id, $nome, $nif, $morada, $telefone, $email, $notas, $photo_path, $id);
+            $stmt->bind_param("isisissssi",$user_id, $nome, $nif, $morada, $telefone, $email, $notas, $photo_path, $photo_path_aux, $id);
             if ($stmt->execute()) {
                 $result = 0;
             }else{
@@ -312,7 +341,7 @@
     }
 
     /* Creates a new client */
-    function newClient($nome, $user_id, $nif, $morada, $telefone, $email, $notas, $photo_path){
+    function newClient($nome, $user_id, $nif, $morada, $telefone, $email, $notas, $photo_path, $photo_path_aux){
         global $mydb;
         if(getClientIDFromNif($nif) != -3){
             return -3;
@@ -320,9 +349,9 @@
         $number=lastIdClients();
         if($number != -1){
             $number=$number+1;
-            $query = "INSERT INTO clients(id,user_id,nome,nif,morada,telefone,email,notas,photo_path) VALUES (?,?,?,?,?,?,?,?,?)";
+            $query = "INSERT INTO clients(id,user_id,nome,nif,morada,telefone,email,notas,photo_path,photo_path_aux) VALUES (?,?,?,?,?,?,?,?,?,?)";
             $stmt = $mydb->prepare($query);
-            $stmt->bind_param("iisisisss",$number, $user_id, $nome, $nif, $morada, $telefone, $email, $notas,$photo_path);
+            $stmt->bind_param("iisisissss",$number, $user_id, $nome, $nif, $morada, $telefone, $email, $notas,$photo_path, $photo_path_aux);
             if ($stmt->execute()) {
                 $result = 0;
             }else{

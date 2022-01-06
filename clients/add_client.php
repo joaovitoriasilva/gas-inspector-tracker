@@ -54,6 +54,7 @@
                 if ($uploadOk == 1) {
                     if (move_uploaded_file($_FILES["clientImgAdd"]["tmp_name"], $target_file)) {
                         $photoPath = "..\clients\clients_img\\".$newname;
+                        $photoPath_aux = $target_file;
                     } else {
                         $addClientAction = -6;
                         $uploadOk = 0;
@@ -61,10 +62,11 @@
                 }
             }else{
                 $photoPath = NULL;
+                $photoPath_aux = NULL;
                 $uploadOk = 1;
             }
             if($uploadOk == 1){
-                $addClientAction = newClient($_POST["clientNameAdd"], $_SESSION["id"], $_POST["clientNifAdd"], $_POST["clientAddressAdd"], $_POST["clientPhoneAdd"], $_POST["clientEmailAdd"],$_POST["clientNotesAdd"], $photoPath);
+                $addClientAction = newClient($_POST["clientNameAdd"], $_SESSION["id"], $_POST["clientNifAdd"], $_POST["clientAddressAdd"], $_POST["clientPhoneAdd"], $_POST["clientEmailAdd"],$_POST["clientNotesAdd"], $photoPath, $photoPath_aux);
             }
             if ($addClientAction == 0){
                 header("Location: ../clients/clients.php?addClientAction=0");

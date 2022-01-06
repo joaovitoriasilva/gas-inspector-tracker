@@ -40,6 +40,7 @@ CREATE  TABLE IF NOT EXISTS `gas-inspector-tracker`.`clients` (
   `email` VARCHAR(100) NULL COMMENT 'Email de telefone de cliente (até 200 caracteres)' ,
   `notas` VARCHAR(250) NULL COMMENT 'Notas cliente (até 250 caracteres)' ,
   `photo_path` VARCHAR(250) NULL COMMENT 'Caminho da foto do utilizador' ,
+  `photo_path_aux` VARCHAR(250) NULL COMMENT 'Caminho da foto do utilizador auxiliar para código' ,
   PRIMARY KEY (`id`) ,
   INDEX `FK_user_id_idx` (`user_id` ASC) ,
   CONSTRAINT `FK_client_user`
