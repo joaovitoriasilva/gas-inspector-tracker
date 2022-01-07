@@ -39,12 +39,12 @@
                     <a href="../login.php" class="w3-bar-item w3-button w3-padding-large w3-right"><i class="fas fa-sign-in-alt"></i> Entrar</a>
                 <?php }else{ ?>
                     <a href="../clients/clients.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-users"></i> Clientes</a>
-                    <!--<a href="../evaluations.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-guitar"></i> Instrumentos</a>
-                    <a href="../nutrition.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-euro-sign"></i> Vendas</a>
-                    <a href="../report.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-user-clock"></i> Report horas</a>
-                    <?php #if($_SESSION["tipo"] == 2){ ?>
-                        <a href="../admin/admin.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-tasks"></i> Administração</a>
-                    <?php #} ?>-->
+                    <a href="../inspections.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-hard-hat"></i> Inspeções</a>
+                    <!--<a href="../nutrition.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-euro-sign"></i> Vendas</a>
+                    <a href="../report.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-user-clock"></i> Report horas</a>-->
+                    <?php if($_SESSION["type"] == 2){ ?>
+                        <a href="../users/users.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-users-cog"></i> Administração</a>
+                    <?php } ?>
                     <a href="../logout.php" class="w3-bar-item w3-button w3-padding-large w3-right w3-hide-small"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 <?php } ?>
             </div>
@@ -54,12 +54,12 @@
         <div id="navSmallScreens" class="w3-bar-block w3-dark-grey w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
             <?php if(isLogged()) {?>
                 <a href="../clients/clients.php" class="w3-bar-item w3-button w3-padding-large" onclick="showNav()"><i class="fas fa-users"></i> Clientes</a>
-                <!--<a href="../evaluations.php" class="w3-bar-item w3-button w3-padding-large" onclick="showNav()"><i class="fas fa-guitar"></i> Instrumentos</a>
-                <a href="../nutrition.php" class="w3-bar-item w3-button w3-padding-large"><i class="fas fa-euro-sign"></i> Vendas</a>
-                <a href="../report.php" class="w3-bar-item w3-button w3-padding-large"><i class="fas fa-user-clock"></i> Report horas</a>
-                <?php #if($_SESSION["tipo"] == 2){ ?>
-                    <a href="../admin/admin.php" class="w3-bar-item w3-button w3-padding-large" onclick="showNav()"><i class="fas fa-tasks"></i> Administração</a>
-                <?php #} ?>-->
+                <a href="../evaluations.php" class="w3-bar-item w3-button w3-padding-large" onclick="showNav()"><i class="fas fa-hard-hat"></i> Inspeções</a>
+                <!--<a href="../nutrition.php" class="w3-bar-item w3-button w3-padding-large"><i class="fas fa-euro-sign"></i> Vendas</a>
+                <a href="../report.php" class="w3-bar-item w3-button w3-padding-large"><i class="fas fa-user-clock"></i> Report horas</a>-->
+                <?php if($_SESSION["type"] == 2){ ?>
+                    <a href="../users/users.php" class="w3-bar-item w3-button w3-padding-large" onclick="showNav()"><i class="fas fa-users-cog"></i> Administração</a>
+                <?php } ?>
                 <a href="../logout.php" class="w3-bar-item w3-button w3-padding-large" onclick="showNav()"><i class="fas fa-sign-out-alt"></i> Sair</a>
             <?php } ?>
         </div>

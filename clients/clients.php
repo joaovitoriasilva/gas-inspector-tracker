@@ -141,18 +141,18 @@
                 <ul class="w3-ul w3-border-top w3-border-bottom w3-hoverable">
                     <?php foreach ($clients as $client) { ?>
                         <li class="w3-bar w3-button" onclick="window.location.href = '../clients/client.php?clientID=<?php echo ($client["id"]); ?>';">
-                            <img src=<?php if(is_null($client["photo_path"])){ echo ("../img/avatar/Male_Avatar_4.png"); }else{ echo ($client["photo_path"]); }?> class="w3-bar-item w3-circle" style="width:85px">
+                            <img src=<?php if(is_null($client["photo_path"])){ echo ("../img/avatar/Male_Avatar_4.png"); }else{ echo ($client["photo_path"]); }?> class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
                             <div class="w3-bar-item">
                                 <?php if(!is_null($client["name"])){ ?>
-                                    <span class="w3-large"><?php echo ($client["name"]); ?></span><br>
+                                    <span class="w3-large w3-left"><?php echo ($client["name"]); ?></span><br>
                                 <?php }else{ ?>
-                                    <span class="w3-large">Nome não introduzido</span><br>
+                                    <span class="w3-large w3-left">Nome não introduzido</span><br>
                                 <?php } ?>
                                 <?php if(!is_null($client["nif"])){ ?>
-                                    <span><strong>NIF: </strong><?php echo ($client["nif"]); ?></span>
+                                    <span class="w3-left">NIF: <?php echo ($client["nif"]); ?></span>
                                 <?php }else{ ?>
                                     <?php if(!is_null($client["phone"])){ ?>
-                                        <span><strong>Contacto: </strong><?php echo ($client["phone"]); ?></span>
+                                        <span class="w3-left">Contacto: <?php echo ($client["phone"]); ?></span>
                                     <?php } ?>
                                 <?php } ?>
                             </div>

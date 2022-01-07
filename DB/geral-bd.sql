@@ -31,7 +31,7 @@ INSERT INTO `gas-inspector-tracker`.`users` (`id`,`name`,`username`,`password`,`
 -- Table `gas-inspector-tracker`.`clients`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `gas-inspector-tracker`.`clients` (
-  `id` INT(3) NOT NULL ,
+  `id` INT(10) NOT NULL ,
   `user_id` INT(10) NOT NULL COMMENT 'ID de utilizador que criou cliente (até 10 digitos)' ,
   `nome` VARCHAR(45) NULL COMMENT 'Nome completo (pode incluir espaços)' ,
   `nif` INT(9) NULL COMMENT 'Número de contribuinte de cliente (até nove digitos)' ,
@@ -46,6 +46,32 @@ CREATE  TABLE IF NOT EXISTS `gas-inspector-tracker`.`clients` (
   CONSTRAINT `FK_client_user`
     FOREIGN KEY (`user_id` )
     REFERENCES `gas-inspector-tracker`.`users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `gas-inspector-tracker`.`inspections`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `gas-inspector-tracker`.`inspections` (
+  `id` INT NOT NULL ,
+  `user_id` INT(10) NOT NULL COMMENT 'ID de utilizador que criou cliente (até 10 digitos)' ,
+  `client_id` INT(10) NOT NULL COMMENT 'ID de cliente (até 10 digitos)' ,
+  `data_inspecao` DATE NOT NULL COMMENT 'Data de inspeção (data)' ,
+  `data_prox_inspecao` DATE NOT NULL COMMENT 'Data de próxima inspeção (data)' ,
+  `descricao` VARCHAR(250) NULL COMMENT 'Descrição de inspeção (250 caracteres)',
+  `notas` VARCHAR(250) NULL COMMENT 'Notas inspeção (até 250 caracteres)' ,
+  PRIMARY KEY (`id`) ,
+  INDEX `FK_user_id_idx` (`user_id` ASC) ,
+  INDEX `FK_client_id_idx` (`client_id` ASC) ,
+  CONSTRAINT `FK_inspection_user`
+    FOREIGN KEY (`user_id` )
+    REFERENCES `gas-inspector-tracker`.`users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_inspection_client`
+    FOREIGN KEY (`client_id` )
+    REFERENCES `gas-inspector-tracker`.`clients` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
