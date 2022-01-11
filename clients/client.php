@@ -7,6 +7,10 @@
     
     $page="client";
 
+    if(!isLogged()){
+        header("Location: ../login.php");
+    }
+
     function getClientInfo(){
         global $clientID, $clientName, $clientNIF, $clientPhone, $clientEmail, $clientAddress, $clientNotes, $clientImg, $clientLoanCount, $clientLoans, $clientRepairCount, $clientConstructionCount;
 
@@ -36,6 +40,15 @@
     }
 
     getClientInfo();
+
+    if(isset($_GET["pageNumber"])){
+        $pageNumber = $_GET["pageNumber"];
+    }else{
+        $pageNumber = 1;
+    }
+    $clientInspections = getInspectionsForClientCreatedByUser($_SESSION["id"], $_GET["clientID"], $pageNumber);
+    $numInspectionsClient = getNumInspectionsForClientCreatedByUser($_SESSION["id"], $_GET["clientID"]);
+    $total_pages = ceil($numInspectionsClient / 25);
 
     /* Delete action */
     if(isset($_GET["deleteClient"]) && $_GET["deleteClient"] == 1){
@@ -127,6 +140,58 @@
                 <button onclick="window.location.href = '../clients/client.php?clientID=<?php echo ($clientID); ?>&deleteClient=1';" type="button" class="w3-button w3-block w3-red w3-section w3-padding">Eliminar cliente</button>
             </div>
         </div>
+
+        <!-- Client inspections section -->
+        <div class="w3-content" style="max-width:600px">
+            <h4>Inspeções cliente:</h4>
+            
+            <!-- Error banners -->
+            <?php if($clientInspections == -1 || $numInspectionsClient == -1 || $clientInspections == -2){ ?>
+                <div class="w3-panel w3-red w3-display-container">
+                    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+                    <h3><i class="fas fa-hand-paper"></i> Erro!</h3>
+                    <p>Não foi possível listar inspeções do cliente.</p>
+                </div>
+            <?php }else{ ?>
+                <!-- Info banners -->
+                <?php if($clientInspections == -3){ ?>
+                    <div class="w3-panel w3-yellow w3-display-container">
+                        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+                        <h3><i class="fas fa-exclamation-triangle"></i> Info!</h3>
+                        <p>Não existem inspeções inseridas.</p>
+                    </div>
+                <?php }else{ ?>
+                    <p>Existe um total de <?php echo ($numInspectionsClient); ?> inspeções (25 por página):</p>
+                    <ul class="w3-ul w3-border-top w3-border-bottom w3-hoverable">
+                        <?php foreach ($clientInspections as $inspection) { ?>
+                            
+                            <li class="w3-bar w3-button" onclick="window.location.href = '../inspections/inspection.php?inspectionID=<?php echo ($inspection["id"]); ?>';">
+                                <img src=<?php if(is_null($clientImg)){ echo ("../img/avatar/Male_Avatar_4.png"); }else{ echo ($clientImg); }?> class="w3-bar-item w3-circle" style="width:85px">
+                                <div class="w3-bar-item">
+                                    <?php if(!is_null($clientName)){ ?>
+                                        <span class="w3-large w3-left"><?php echo ($clientName); ?></span><br>
+                                    <?php }else{ ?>
+                                        <span class="w3-large w3-left">Nome não introduzido</span><br>
+                                    <?php } ?>
+                                    <span class="w3-left">Data última inspeção: <?php echo ($inspection["data_inspecao"]); ?></span><br>
+                                    <span class="w3-left">Data limite próxima inspeção: <?php echo ($inspection["data_prox_inspecao"]); ?></span>
+                                </div>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                    <div class="w3-container w3-content w3-center w3-padding-16">
+                        <div class="w3-bar">
+                            <a href="?pageNumber=1" class="w3-button">«</a>
+                            <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
+                                <a href="?pageNumber=<?php echo ($i);?>" class="w3-button <?php if($i == $pageNumber){ echo("w3-dark-grey");} ?>"><?php echo ($i);?></a>
+                            <?php } ?>
+                            <a href="?pageNumber=<?php echo ($total_pages);?>" class="w3-button">»</a>
+                        </div>
+                    </div>
+                <?php } ?>
+            <?php } ?>
+        </div>
+
         <button onclick="window.history.back();" type="button" class="w3-button w3-block w3-blue w3-section w3-padding w3-hide-meddium w3-hide-large">Voltar</button>
     </div>
 </div>

@@ -7,6 +7,10 @@
     
     $page="add_client";
 
+    if(!isLogged()){
+        header("Location: ../login.php");
+    }
+
     if(isset($_POST["addClient"])){
         if(!empty($_POST["clientNifAdd"]) || !empty($_POST["clientPhoneAdd"]) || !empty($_POST["clientNameAdd"])){
             if(empty($_POST["clientNameAdd"])){

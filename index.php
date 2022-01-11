@@ -84,26 +84,26 @@
                                 }
                             ?>
                             <li class="w3-bar w3-button" onclick="window.location.href = '../clients/client.php?clientID=<?php echo ($inspection["client_id"]); ?>';">
-                                <img src=<?php if(is_null($clientImg)){ echo ("../img/avatar/Male_Avatar_4.png"); }else{ echo ($clientImg); }?> class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+                                <img src=<?php if(is_null($clientImg)){ echo ("../img/avatar/Male_Avatar_4.png"); }else{ echo ($clientImg); }?> class="w3-bar-item w3-circle" style="width:85px">
                                 <div class="w3-bar-item">
                                     <?php if(!is_null($clientName)){ ?>
                                         <span class="w3-large w3-left"><?php echo ($clientName); ?></span><br>
                                     <?php }else{ ?>
                                         <span class="w3-large w3-left">Nome não introduzido</span><br>
                                     <?php } ?>
-                                    <span class="w3-left">Data última inspeção: <?php echo ($inspection["data_inspecao"]); ?></span><br>
-                                    <span class="w3-left">Data limite próxima inspeção: <?php echo ($inspection["data_prox_inspecao"]); ?></span>
+                                    <span class="w3-left">Última inspeção: <?php echo ($inspection["data_inspecao"]); ?></span><br>
+                                    <span class="w3-left">Próxima inspeção: <?php echo ($inspection["data_prox_inspecao"]); ?></span>
                                 </div>
                             </li>
                         <?php } ?>
                     </ul>
                     <div class="w3-container w3-content w3-center w3-padding-16">
                         <div class="w3-bar">
-                            <a href="?pageNumber=1" class="w3-button">«</a>
+                            <a href="?pageNumberWeek=1" class="w3-button">«</a>
                             <?php for ($i = 1; $i <= $total_pages_week; $i++) { ?>
-                                <a href="?pageNumber=<?php echo ($i);?>" class="w3-button <?php if($i == $pageNumberWeek){ echo("w3-dark-grey");} ?>"><?php echo ($i);?></a>
+                                <a href="?pageNumberWeek=<?php echo ($i);?>" class="w3-button <?php if($i == $pageNumberWeek){ echo("w3-dark-grey");} ?>"><?php echo ($i);?></a>
                             <?php } ?>
-                            <a href="?pageNumber=<?php echo ($total_pages_week);?>" class="w3-button">»</a>
+                            <a href="?pageNumberWeek=<?php echo ($total_pages_week);?>" class="w3-button">»</a>
                         </div>
                     </div>
                 <?php } ?>
@@ -145,7 +145,7 @@
                                 }
                             ?>
                             <li class="w3-bar w3-button" onclick="window.location.href = '../clients/client.php?clientID=<?php echo ($inspection["client_id"]); ?>';">
-                                <img src=<?php if(is_null($clientImg)){ echo ("../img/avatar/Male_Avatar_4.png"); }else{ echo ($clientImg); }?> class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+                                <img src=<?php if(is_null($clientImg)){ echo ("../img/avatar/Male_Avatar_4.png"); }else{ echo ($clientImg); }?> class="w3-bar-item w3-circle" style="width:85px">
                                 <div class="w3-bar-item">
                                     <?php if(!is_null($clientName)){ ?>
                                         <span class="w3-large w3-left"><?php echo ($clientName); ?></span><br>
@@ -153,18 +153,18 @@
                                         <span class="w3-large w3-left">Nome não introduzido</span><br>
                                     <?php } ?>
                                     <span class="w3-left">Data última inspeção: <?php echo ($inspection["data_inspecao"]); ?></span><br>
-                                    <span class="w3-left">Data limite próxima inspeção: <?php echo ($inspection["data_prox_inspecao"]); ?></span>
+                                    <span class="w3-left">Data próxima inspeção: <?php echo ($inspection["data_prox_inspecao"]); ?></span>
                                 </div>
                             </li>
                         <?php } ?>
                     </ul>
                     <div class="w3-container w3-content w3-center w3-padding-16">
                         <div class="w3-bar">
-                            <a href="?pageNumber=1" class="w3-button">«</a>
+                            <a href="?pageNumberMonth=1" class="w3-button">«</a>
                             <?php for ($i = 1; $i <= $total_pages_month; $i++) { ?>
-                                <a href="?pageNumber=<?php echo ($i);?>" class="w3-button <?php if($i == $pageNumberMonth){ echo("w3-dark-grey");} ?>"><?php echo ($i);?></a>
+                                <a href="?pageNumberMonth=<?php echo ($i);?>" class="w3-button <?php if($i == $pageNumberMonth){ echo("w3-dark-grey");} ?>"><?php echo ($i);?></a>
                             <?php } ?>
-                            <a href="?pageNumber=<?php echo ($total_pages_month);?>" class="w3-button">»</a>
+                            <a href="?pageNumberMonth=<?php echo ($total_pages_month);?>" class="w3-button">»</a>
                         </div>
                     </div>
                 <?php } ?>

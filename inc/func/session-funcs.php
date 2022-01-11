@@ -34,7 +34,6 @@
         unset($_SESSION["username"]);
         unset($_SESSION["name"]);
         unset($_SESSION["type"]);
-        unset($_SESSION["gender"]);
         unset($_SESSION["photo_path"]);
     }
 
@@ -44,7 +43,7 @@
         if ($userID >= 0)
         {
         global $mydb;
-        $query = "SELECT id, name, username, type, gender, photo_path FROM users WHERE (id = ?)";
+        $query = "SELECT id, name, username, type, photo_path, photo_path_aux FROM users WHERE (id = ?)";
         $stmt = $mydb->prepare($query);
         $stmt->bind_param("i", $userID);
         $stmt->execute();
@@ -57,6 +56,7 @@
                 $_SESSION["type"] = $type;
                 $_SESSION["gender"] = $gender;
                 $_SESSION["photo_path"] = $photo_path;
+                $_SESSION["photo_path_aux"] = $photo_path;
             }
         $stmt->close();		
         }

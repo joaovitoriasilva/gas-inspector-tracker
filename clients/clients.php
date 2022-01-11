@@ -7,6 +7,10 @@
     
     $page="clients";
 
+    if(!isLogged()){
+        header("Location: ../login.php");
+    }
+
     if(isset($_GET["clientID"])){
         $clientID = $_GET["clientID"];
     }else{
@@ -141,7 +145,7 @@
                 <ul class="w3-ul w3-border-top w3-border-bottom w3-hoverable">
                     <?php foreach ($clients as $client) { ?>
                         <li class="w3-bar w3-button" onclick="window.location.href = '../clients/client.php?clientID=<?php echo ($client["id"]); ?>';">
-                            <img src=<?php if(is_null($client["photo_path"])){ echo ("../img/avatar/Male_Avatar_4.png"); }else{ echo ($client["photo_path"]); }?> class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+                            <img src=<?php if(is_null($client["photo_path"])){ echo ("../img/avatar/Male_Avatar_4.png"); }else{ echo ($client["photo_path"]); }?> class="w3-bar-item w3-circle" style="width:85px">
                             <div class="w3-bar-item">
                                 <?php if(!is_null($client["name"])){ ?>
                                     <span class="w3-large w3-left"><?php echo ($client["name"]); ?></span><br>

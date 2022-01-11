@@ -7,6 +7,10 @@
     
     $page="edit_client";
 
+    if(!isLogged()){
+        header("Location: ../login.php");
+    }
+
     /* Retrive variables from get */
     if(isset($_GET["clientID"])){
         if(isset($_GET["deletePhotoAction"]) && $_GET["deletePhotoAction"] == 1){
