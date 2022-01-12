@@ -56,10 +56,10 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `gas-inspector-tracker`.`inspections` (
   `id` INT NOT NULL ,
-  `user_id` INT(10) NOT NULL COMMENT 'ID de utilizador que criou cliente (até 10 digitos)' ,
+  `user_id` INT(10) NOT NULL COMMENT 'ID de utilizador que criou inspeção (até 10 digitos)' ,
   `client_id` INT(10) NOT NULL COMMENT 'ID de cliente (até 10 digitos)' ,
   `data_inspecao` DATE NOT NULL COMMENT 'Data de inspeção (data)' ,
-  `data_prox_inspecao` DATE NOT NULL COMMENT 'Data de próxima inspeção (data)' ,
+  `data_limite_prox_inspecao` DATE NOT NULL COMMENT 'Data limite de próxima inspeção (data)' ,
   `descricao` VARCHAR(250) NULL COMMENT 'Descrição de inspeção (250 caracteres)',
   `notas` VARCHAR(250) NULL COMMENT 'Notas inspeção (até 250 caracteres)' ,
   PRIMARY KEY (`id`) ,

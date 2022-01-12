@@ -33,7 +33,7 @@
         }
     }
 
-    if(isset($_GET["clientID"])){
+    if(isset($_GET["clientID"]) && !empty($_GET["clientID"])){
         $clientID = $_GET["clientID"];
     }else{
         header("Location: ../clients/clients.php");
@@ -46,13 +46,13 @@
     }else{
         $pageNumber = 1;
     }
-    $clientInspections = getInspectionsForClientCreatedByUser($_SESSION["id"], $_GET["clientID"], $pageNumber);
-    $numInspectionsClient = getNumInspectionsForClientCreatedByUser($_SESSION["id"], $_GET["clientID"]);
+    $clientInspections = getClientInspections($_GET["clientID"], $pageNumber);
+    $numInspectionsClient = numInspectionsClient($_GET["clientID"]);
     $total_pages = ceil($numInspectionsClient / 25);
 
     /* Delete action */
     if(isset($_GET["deleteClient"]) && $_GET["deleteClient"] == 1){
-        if($clientLoanCount == 0 && $clientRepairCount == 0 && $clientConstructionCount == 0){
+        if($numInspectionsClient == 0){
             $photo_path = getClientPhotoAuxPathFromID($_GET["clientID"]);
             $deleteAction = deleteClient($_GET["clientID"]);
             if($deleteAction == 0){
@@ -101,7 +101,7 @@
             <div class="w3-panel w3-red w3-display-container">
                 <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h3><i class="fas fa-hand-paper"></i> Erro</h3>
-                <p>Existem empréstimos, reparações e/ou construções associadas a este cliente. Não é possível eliminar (-3).</p>
+                <p>Existem inspeções associadas a este cliente. Não é possível eliminar (-3).</p>
             </div>
         <?php } ?>
         <!-- Success banners -->
@@ -123,6 +123,33 @@
                 </div>
             <?php } 
         }?>
+        <?php if(isset($_GET["addInspectionAction"])){
+            if($_GET["addInspectionAction"] == 0){ ?>
+                <div class="w3-panel w3-green w3-display-container">
+                    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+                    <h3>Info</h3>
+                    <p>Inspeção adicionada.</p>
+                </div>
+            <?php } 
+        }?>
+        <?php if(isset($_GET["editInspectionAction"])){
+            if($_GET["editInspectionAction"] == 0){ ?>
+                <div class="w3-panel w3-green w3-display-container">
+                    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+                    <h3>Info</h3>
+                    <p>Inspeção editada.</p>
+                </div>
+            <?php } 
+        }?>
+        <?php if(isset($_GET["inspectionDeleted"])){
+            if($_GET["inspectionDeleted"] == 0){ ?>
+                <div class="w3-panel w3-green w3-display-container">
+                    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+                    <h3>Info</h3>
+                    <p>Inspeção eliminada.</p>
+                </div>
+            <?php } 
+        }?>
 
         
         <div class="w3-content" style="max-width:600px">
@@ -137,13 +164,16 @@
                 <p><strong>Morada: </strong><?php if(!is_null($clientAddress)){ echo ($clientAddress); }else{ echo ("Não especificado"); } ?></p>
                 <p><strong>Notas: </strong><?php if(!is_null($clientNotes)){ echo ($clientNotes); }else{ echo ("Não especificado"); } ?></p>
                 <button onclick="window.location.href = '../clients/edit_client.php?clientID=<?php echo ($clientID); ?>';" type="button" class="w3-button w3-block w3-blue w3-section w3-padding">Editar cliente</button>
-                <button onclick="window.location.href = '../clients/client.php?clientID=<?php echo ($clientID); ?>&deleteClient=1';" type="button" class="w3-button w3-block w3-red w3-section w3-padding">Eliminar cliente</button>
             </div>
         </div>
 
         <!-- Client inspections section -->
         <div class="w3-content" style="max-width:600px">
             <h4>Inspeções cliente:</h4>
+
+            <div>
+                <button onclick="window.location.href = '../inspections/add_inspection.php?clientID=<?php echo ($clientID); ?>';" type="button" class="w3-button w3-block w3-green w3-section w3-padding">Nova inspeção</button>
+            </div>
             
             <!-- Error banners -->
             <?php if($clientInspections == -1 || $numInspectionsClient == -1 || $clientInspections == -2){ ?>
@@ -164,17 +194,20 @@
                     <p>Existe um total de <?php echo ($numInspectionsClient); ?> inspeções (25 por página):</p>
                     <ul class="w3-ul w3-border-top w3-border-bottom w3-hoverable">
                         <?php foreach ($clientInspections as $inspection) { ?>
-                            
-                            <li class="w3-bar w3-button" onclick="window.location.href = '../inspections/inspection.php?inspectionID=<?php echo ($inspection["id"]); ?>';">
-                                <img src=<?php if(is_null($clientImg)){ echo ("../img/avatar/Male_Avatar_4.png"); }else{ echo ($clientImg); }?> class="w3-bar-item w3-circle" style="width:85px">
+                            <li class="w3-bar w3-button" onclick="window.location.href = '../inspections/edit_inspection.php?inspectionID=<?php echo ($inspection["id"]); ?>';">
                                 <div class="w3-bar-item">
-                                    <?php if(!is_null($clientName)){ ?>
-                                        <span class="w3-large w3-left"><?php echo ($clientName); ?></span><br>
+                                    <span class="w3-left"><strong>Última inspeção: </strong><?php echo ($inspection["data_inspecao"]); ?></span><br>
+                                    <span class="w3-left"><strong>Limite próxima inspeção: </strong><?php echo ($inspection["data_limite_prox_inspecao"]); ?></span><br>
+                                    <?php if(!is_null($inspection["descricao"])){ ?>
+                                        <span class="w3-left"><strong>Descrição: </strong><?php echo ($inspection["descricao"]); ?></span><br>
                                     <?php }else{ ?>
-                                        <span class="w3-large w3-left">Nome não introduzido</span><br>
+                                        <span class="w3-left"><strong>Descrição: </strong> Não especificado</span><br>
                                     <?php } ?>
-                                    <span class="w3-left">Data última inspeção: <?php echo ($inspection["data_inspecao"]); ?></span><br>
-                                    <span class="w3-left">Data limite próxima inspeção: <?php echo ($inspection["data_prox_inspecao"]); ?></span>
+                                    <?php if(!is_null($inspection["notas"])){ ?>
+                                        <span class="w3-left"><strong>Notas: </strong><?php echo ($inspection["notas"]); ?></span><br>
+                                    <?php }else{ ?>
+                                        <span class="w3-left"><strong>Notas: </strong> Não especificado</span><br>
+                                    <?php } ?>
                                 </div>
                             </li>
                         <?php } ?>
@@ -190,6 +223,10 @@
                     </div>
                 <?php } ?>
             <?php } ?>
+        </div>
+
+        <div>
+            <button onclick="window.location.href = '../clients/client.php?clientID=<?php echo ($clientID); ?>&deleteClient=1';" type="button" class="w3-button w3-block w3-red w3-section w3-padding">Eliminar cliente</button>
         </div>
 
         <button onclick="window.history.back();" type="button" class="w3-button w3-block w3-blue w3-section w3-padding w3-hide-meddium w3-hide-large">Voltar</button>
