@@ -130,7 +130,9 @@
         /* Delete action */
         if(isset($_GET["deleteUser"]) && $_GET["deleteUser"] == 1){
             if($_GET["userID"] != $_SESSION["id"]){
-                #if($clientLoanCount == 0 && $clientRepairCount == 0 && $clientConstructionCount == 0){
+                $clientsNumber = getNumClientsCreatedByUser($_GET["userID"]);
+                $inspectionsNumber = numInspectionsUser($_GET["userID"]);
+                if($clientsNumber == 0 && $inspectionsNumber == 0){
                     $photo_path = getUserPhotoAuxFromID($_GET["userID"]);
                     $deleteAction = deleteUser($_GET["userID"]);
                     if($deleteAction == 0){
@@ -144,9 +146,9 @@
                             header("Location: ../users/users.php?userDeleted=0&photoDeleted=2");
                         }
                     }
-                #}else{
-                #    $deleteAction = -3;
-                #}
+                }else{
+                    $deleteAction = -4;
+                }
             }else{
                 $deleteAction = -3;
             }
@@ -189,6 +191,10 @@
                                         <?php }else{ ?>
                                             <?php if($deleteAction == -3){ ?>
                                                 <p>Não é possível eliminar utilizador atualmente em uso (-3).</p>
+                                            <?php }else{ ?>
+                                                <?php if($deleteAction == -4){ ?>
+                                                    <p>Não é possível eliminar utilizador. Utilizador tem outros objetos associados (clientes e/ou inspeções) (-4).</p>
+                                                <?php } ?>
                                             <?php } ?>
                                         <?php } ?>
                                     <?php } ?>

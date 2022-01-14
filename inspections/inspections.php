@@ -57,7 +57,7 @@
                                 $clientImg = $clientValue["photo_path"];
                             }
                         ?>
-                        <li class="w3-bar w3-button" onclick="window.location.href = '../inspections/edit_inspection.php?inspectionID=<?php echo ($inspection["id"]); ?>';">
+                        <li class="w3-bar w3-button" onclick="window.location.href = '../inspections/inspection.php?inspectionID=<?php echo ($inspection["id"]); ?>';">
                             <img src=<?php if(is_null($clientImg)){ echo ("../img/avatar/Male_Avatar_4.png"); }else{ echo ($clientImg); }?> class="w3-bar-item w3-circle" style="width:85px">
                             <div class="w3-bar-item">
                                 <?php if(!is_null($clientName)){ ?>

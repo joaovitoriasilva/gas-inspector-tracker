@@ -194,7 +194,7 @@
                     <p>Existe um total de <?php echo ($numInspectionsClient); ?> inspeções (25 por página):</p>
                     <ul class="w3-ul w3-border-top w3-border-bottom w3-hoverable">
                         <?php foreach ($clientInspections as $inspection) { ?>
-                            <li class="w3-bar w3-button" onclick="window.location.href = '../inspections/edit_inspection.php?inspectionID=<?php echo ($inspection["id"]); ?>';">
+                            <li class="w3-bar w3-button" onclick="window.location.href = '../inspections/inspection.php?inspectionID=<?php echo ($inspection["id"]); ?>';">
                                 <div class="w3-bar-item">
                                     <span class="w3-left"><strong>Última inspeção: </strong><?php echo ($inspection["data_inspecao"]); ?></span><br>
                                     <span class="w3-left"><strong>Limite próxima inspeção: </strong><?php echo ($inspection["data_limite_prox_inspecao"]); ?></span><br>

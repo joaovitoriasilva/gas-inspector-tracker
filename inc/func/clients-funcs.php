@@ -363,4 +363,19 @@
         }
         return $result;
     }
+
+    /* Get number of clients created by user */
+    function getNumClientsCreatedByUser($user_id){
+        global $mydb;
+        $query = "SELECT count(*) FROM clients WHERE user_id=?";
+        $stmt = $mydb->prepare($query);
+        $stmt->bind_param("i",$user_id);
+        $stmt->execute();       
+        $stmt->bind_result($number);
+        if (!$stmt->fetch()){
+            $number = -1;
+        }
+        $stmt->close();
+        return $number;
+    }
 ?>

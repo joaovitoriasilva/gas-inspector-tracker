@@ -45,7 +45,7 @@
                     <!--<a href="../nutrition.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-euro-sign"></i> Vendas</a>
                     <a href="../report.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-user-clock"></i> Report horas</a>-->
                     <?php if($_SESSION["type"] == 2){ ?>
-                        <a href="../users/users.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-users-cog"></i> Utilizadores</a>
+                        <a href="../users/users.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small"><i class="fas fa-users-cog"></i> Administração</a>
                     <?php } ?>
                     <a href="../logout.php" class="w3-bar-item w3-button w3-padding-large w3-right w3-hide-small"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 <?php } ?>
@@ -60,7 +60,7 @@
                 <!--<a href="../nutrition.php" class="w3-bar-item w3-button w3-padding-large"><i class="fas fa-euro-sign"></i> Vendas</a>
                 <a href="../report.php" class="w3-bar-item w3-button w3-padding-large"><i class="fas fa-user-clock"></i> Report horas</a>-->
                 <?php if($_SESSION["type"] == 2){ ?>
-                    <a href="../users/users.php" class="w3-bar-item w3-button w3-padding-large" onclick="showNav()"><i class="fas fa-users-cog"></i> Utilizadores</a>
+                    <a href="../users/users.php" class="w3-bar-item w3-button w3-padding-large" onclick="showNav()"><i class="fas fa-users-cog"></i> Administração</a>
                 <?php } ?>
                 <a href="../logout.php" class="w3-bar-item w3-button w3-padding-large" onclick="showNav()"><i class="fas fa-sign-out-alt"></i> Sair</a>
             <?php } ?>
